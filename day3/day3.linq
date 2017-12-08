@@ -1,18 +1,3 @@
-<Query Kind="FSharpProgram">
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\EventStore.ClientAPI.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\FSharp.Core.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Gambit.EventStore.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Marvel.Consul.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Marvel.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Marvel.EventStore.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Marvel.Json.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Microsoft.ServiceBus.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\Newtonsoft.Json.dll</Reference>
-  <Reference>&lt;MyDocuments&gt;\Code\gambit\Gambit.Core\servicebin\NLog.dll</Reference>
-  <Reference>&lt;RuntimeDirectory&gt;\System.Collections.dll</Reference>
-  <Reference>&lt;RuntimeDirectory&gt;\System.dll</Reference>
-</Query>
-
 // Problem is based on https://en.wikipedia.org/wiki/Ulam_spiral
 
 let doMove (x,y) (dx,dy) = (x+dx, y+dy)
