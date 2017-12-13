@@ -68,23 +68,23 @@ module PartII =
 
     let rec findBalance (tower:Tower) shouldWeigh =
 
-            if tower.TotalWeight <> shouldWeigh && tower.Balanced then
-                tower.Weight + (shouldWeigh - tower.TotalWeight)
-            elif not tower.Balanced then
-                let children =
+        if tower.TotalWeight <> shouldWeigh && tower.Balanced then
+            tower.Weight + (shouldWeigh - tower.TotalWeight)
+        elif not tower.Balanced then
+            let children =
+                tower.Stacks
+                |> List.map (fun s ->
+                    s,
                     tower.Stacks
-                    |> List.map (fun s ->
-                        s,
-                        tower.Stacks
-                        |> List.exists(fun ss -> s.Name <> ss.Name && ss.TotalWeight = s.TotalWeight))
-                // What *should* all the children weigh?
-                let childrenShouldWeigh = (children |> List.find snd |> fst).TotalWeight
+                    |> List.exists(fun ss -> s.Name <> ss.Name && ss.TotalWeight = s.TotalWeight))
+            // What *should* all the children weigh?
+            let childrenShouldWeigh = (children |> List.find snd |> fst).TotalWeight
 
-                // Which child doesn't
-                let unbalancedChild = children |> List.find (snd >> not) |> fst
+            // Which child doesn't
+            let unbalancedChild = children |> List.find (snd >> not) |> fst
 
-                findBalance unbalancedChild childrenShouldWeigh
-            else tower.Weight
+            findBalance unbalancedChild childrenShouldWeigh
+        else tower.Weight
 
 
     let stubs =
