@@ -6,26 +6,34 @@ open System.Text
 open System
 open Helpers
 
-type Operation = 
-| Increment 
-| Decrement
-let compare left condition right =
+type Operation = Inc | Dec
+
+
+let comparer left condition right =
     match condition with
-    | "<" -> left < right
-    | "<=" -> left <= right
-    | ">" -> left > right
-    | ">=" -> left >= right
-    | "==" -> left = right
-    | "!=" -> left <> right
-    | _-> failwith "unknown operation"
+    | "==" -> (=)
+    | "<" -> (<)
+    | ">" -> (>)
+    | ">=" -> (>=)
+    | "<=" -> (<=)
+    | "!=" -> (<>)
+    | _ -> failwith "unknown condition"
+    |> fun comp -> left comp right 
+
+type Comparison = Comparison of string
+    with
+        static member Compare left (Comparison comparison) right =
+            match comparison with
+            | "<" -> left < right
+            | "<=" -> left <= right
+            | ">" -> left > right
+            | ">=" -> left >= right
+            | "==" -> left = right
+            | "!=" -> left <> right
+            | _-> failwith "Invalid operator"
 
 type Instruction =
-    { 
-        Register: string
-        Operation: Operation
-        Operand: int
-        Condition: string*string*int 
-    }
+    { Register: string; Operation: Operation; Operand: int; Condition: string*Comparison*int }
     with
         static member Execute registers (instruction: Instruction) =
             // Lookup register value from map
@@ -38,20 +46,17 @@ type Instruction =
             
             let reg = getRegister conditionalRegister 
             // Check condition
-            if compare reg comparison conditionalValue then
-                let newRegValue = 
-                    match instruction.Operation with 
-                    | Increment ->  
-                        (getRegister instruction.Register) + instruction.Operand
-                    | _ ->
-                        (getRegister instruction.Register) - instruction.Operand
+            if Comparison.Compare (getRegister conditionalRegister) comparison conditionalValue then
+                let newRegValue = // Calculate new register value
+                    if instruction.Operation = Inc then (getRegister instruction.Register) + instruction.Operand
+                    else (getRegister instruction.Register) - instruction.Operand
 
                 // Add new value to map
                 registers |> Map.add instruction.Register newRegValue
             else registers
 
 let parseList fn (str: string) =
-    str.Split([|'\t'; ' '|])
+    str.Split([|'\t'; ' '; '\r'; '\n'|])
     |> Array.choose (fun e ->
         match e.Trim() with
         | "" -> None
@@ -64,12 +69,13 @@ let solve input =
     let finalState, finalHighestValue =
         input
         |> Array.map (fun line ->
+            // Parse line into instruction
             let tokens = parseList id line
             {
                 Register = tokens.[0]
-                Operation = if tokens.[1] = "inc" then Increment else Decrement
+                Operation = if tokens.[1] = "inc" then Inc else Dec
                 Operand = int tokens.[2]
-                Condition = tokens.[4], tokens.[5], int tokens.[6]
+                Condition = tokens.[4], Comparison tokens.[5], int tokens.[6]
             }
         )
         |> Array.fold (fun (registers, maxValue) instruction ->
@@ -90,8 +96,8 @@ module PartI =
     let answers _ = 
         printfn "... Part I ..."
         System.IO.File.ReadAllLines "day8.txt"
-        |> solve |> fst
-        |> printfn "Largest Value in Any Register: %d" 
+        |> solve
+        |> printfn "Highest Value: %A" 
 
 
 PartI.answers()
@@ -99,9 +105,6 @@ PartI.answers()
 
 module PartII = 
     let answers _ = 
-
         printfn "... Part II ..."
-        System.IO.File.ReadAllLines "day8.txt"
-        |> solve |> snd
-        |> printfn "Highest Value held in any register: %d"
+
 PartII.answers()
