@@ -13,7 +13,7 @@ Solutions in F# for [Advent of Code 2017](http://adventofcode.com/2017)
 * Day 9 - Solution 1 + Solution 2
 * Day 10 - Solution 1 + Solution 2 
 * Day 11 - Solution 1 + Solution 2
-* Day 12
+* Day 12 - Solution 1 + Solution 2
 * Day 13
 * Day 14
 * Day 15
